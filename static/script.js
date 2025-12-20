@@ -38,6 +38,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 3. Listener para copiar texto CURL nos elementos pré-existentes
     document.querySelectorAll('pre.curl-text').forEach(pre => pre.addEventListener('click', () => copyToClipboard(pre)));
+
+    document.querySelectorAll('code').forEach(codeElement => {
+        if (codeElement.textContent.includes('http://example.com')) {
+            codeElement.textContent = codeElement.textContent.replace('http://example.com', baseUrl);
+        }
+   
+    });
+
+    document.querySelectorAll('pre.curl-text').forEach(preElement => {
+        if (preElement.textContent.includes('http://example.com')) {
+            preElement.textContent = preElement.textContent.replace('http://example.com', baseUrl);
+        }
+
+    });
 });
 
 /**
