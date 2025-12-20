@@ -4,7 +4,7 @@ from modules.schema.schemas import AggregateSchema
 router = APIRouter()
 
 @router.post("/metrics/job/aggregate/{job_name}")
-async def increase_aggregate_metric(job_name: str, request: Request, data: AggregateSchema):
+async def increase_aggregate_metric(job_name: str, request: Request):
     try:
         raw_body = (await request.body()).decode()
         counter_name = raw_body.strip().split('{')[0]
@@ -18,9 +18,9 @@ async def increase_aggregate_metric(job_name: str, request: Request, data: Aggre
                 labels[key.strip()] = value.strip().strip('"')
         value = raw_body.strip().split()[-1]
         value = float(value)
-        print(f"Parsed counter metric: name={counter_name}, labels={labels}, value={value}")
+        print_response(f"Parsed counter metric: name={counter_name}, labels={labels}, value={value}")
     except Exception as e:
-        print(f"Error parsing counter metric: {e}")
+        print_response(f"Error parsing counter metric: {e}")
         return {
             "error": "counter metric error", 
             "SendingFormat": 'counter_name{label1="value1",label2="value2"} value'

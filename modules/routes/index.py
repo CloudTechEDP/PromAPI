@@ -59,7 +59,7 @@ async def get_all_metrics():
         if c.metric not in emitted_types:
             response.append(f"# TYPE {c.metric} counter")
             emitted_types.add(c.metric)
-        from datetime import datetime
+        
         unique_label = datetime.now().strftime("%Y%m%dT%H%M%S_%f")
         if labels:
             labels["ts"] = unique_label

@@ -1,4 +1,6 @@
-import inspect
+
+from modules.middleware.master import *
+
 def print_response(response):
     # Obtém o quadro do chamador
     quadro_chamador = inspect.stack()[1]

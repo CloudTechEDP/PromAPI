@@ -26,7 +26,7 @@ def add_metric_counter(table_class, counter_name: str, value: float, labels: dic
     }
 
 def update_metric(existing_metric, value: float, db):
-    db = db
+    # db = db
     existing_metric.value = value
     db.commit()
     db.refresh(existing_metric)

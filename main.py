@@ -1,5 +1,5 @@
 from modules.middleware.master import *
-SHOW_DOCS = os.getenv("SHOW_DOCS", "true").lower()
+SHOW_DOCS = os.getenv("SHOW_DOCS", "false").lower()
 app = FastAPI(
     docs_url=None if SHOW_DOCS != "true" else "/docs",
     redoc_url=None if SHOW_DOCS != "true" else "/redoc",
