@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualização de Métricas</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="static/style.css"> 
+
+</head>
+<body>
+    <div class="container">
+        <h1>PromAPI — The ultimate Prometheus API</h1>
+        <div class="link-item">
+            <p>Projeto Open Source para consolidar o envio de metricas para o prometheus</p>
+            <p>juntando as funcoes do pushgateway e do Aggregation gateway em um sistema unico.</p>
+            <p> simples de usar e simples para persistencia dos dados</p>
+        </div>
+        <br>
+
+
+        <div class="dashboard-container-home" id="metrics-list">
+            <div class="link-item">
+                <div class="metric-name modern-button" tabindex="0" role="button" aria-controls="modal-content" >Aggregate Metric</div>
+                <div class="metric-details" aria-hidden="true">
+                    <p><strong>Descrição:</strong> Agregador de valores, novos valores serao somadas a metrica existente.</p>
+             
+                    <p><strong>Exemplo CURL (Clique para Copiar):</strong></p>
+                    <pre class="curl-text" tabindex="0">echo "aggregate_total{type="counter", label1="job", label2="instance"} 1" | curl --data-binary @- http://172.21.10.15:8001/metrics/job/aggregate/myjob</pre>
+                    <br>
+                </div>
+            </div>
+
+            <div class="link-item">
+                <div class="metric-name modern-button" tabindex="0" role="button" aria-controls="modal-content">Counter Metric</div>
+                <div class="metric-details" aria-hidden="true">
+                    <p><strong>Nome:</strong> Counter Metric</p>
+                    <p><strong>Type:</strong> counter</p>
+                    <p><strong>Descrição:</strong> Uma métrica cumulativa que só pode aumentar ou ser redefinida para zero. Ideal para contagem de requisições ou erros.</p>
+                    <p><strong>Endpoint:</strong> <code>http://example.com/metrics/job/counter/myjob</code></p>
+                    <p><strong>Exemplo CURL (Clique para Copiar):</strong></p>
+                    <pre class="curl-text" tabindex="0">echo "simple_counter_total{label1="job", label2="instance"} 1" | curl --data-binary @- http://172.21.10.15:8001/metrics/job/counter/myjob</pre>
+                </div>
+            </div>
+
+            <div class="link-item">
+                <div class="metric-name modern-button" tabindex="0" role="button" aria-controls="modal-content">Gauge Metric</div>
+                <div class="metric-details" aria-hidden="true">
+                    <p><strong>Nome:</strong> Gauge Metric</p>
+                    <p><strong>Type:</strong> gauge</p>
+                    <p><strong>Descrição:</strong> Uma métrica que representa um único valor numérico que pode aumentar ou diminuir arbitrariamente. Ideal para temperatura, uso de memória ou contagem de usuários ativos.</p>
+                    <p><strong>Endpoint:</strong> <code>http://example.com/metrics/job/gauge/myjob</code></p>
+                    <p><strong>Exemplo CURL (Clique para Copiar):</strong></p>
+                    <pre class="curl-text" tabindex="0"> echo "gauge_metrics{label1="job", label2="instance"} 17" | curl --data-binary @- http://172.21.10.15:8001/metrics/job/gauge/myjob</pre>
+                </div>
+            </div>
+        </div>
+        
+        <br>
+
+        <div class="links-container">
+            <p>Clique nos exemplos e comece o envio das suas metricas.</p>
+
+        </div>
+
+        <div class="links-container">
+            <div class="link-item">
+                <h2>Swagger API Documentation</h2>
+                <p>Acesse a documentação interativa da API para explorar os endpoints e testar as requisições.</p>
+                <a href="/docs" class="modern-button">Acessar Swagger</a>
+            </div>
+            <div class="link-item">
+                <h2>Metrics Endpoint</h2>
+                <p>Visualize as métricas expostas pela aplicação para monitoramento e análise.</p>
+                <a href="/metrics" class="modern-button">Acessar Métricas</a>
+            </div>
+        </div>
+
+        <div style="display: flex; justify-content: center;">
+            <div class="footer">
+                🚀 &copy; 2026 PromAPI — The ultimate Prometheus API 🌟<br>
+                📧 Email: <a href="mailto:celio.jesus01@outlook.com">celio.jesus01@outlook.com</a><br>
+                🔗 LinkedIn: <a href="https://www.linkedin.com/in/celio-jesus" target="_blank">linkedin.com/in/celiojesus01</a><br>
+                💻 GitHub: <a href="https://github.com/CloudTechEDP" target="_blank">https://github.com/CloudTechEDP</a>
+            </div>
+        </div>
+        
+
+
+    </div>
+
+
+    <div id="modal" role="dialog" aria-modal="true" aria-hidden="true">
+        <div id="modal-content">
+            <button class="modal-close" aria-label="Fechar modal">✕</button>
+            </div>
+    </div>
+
+    <script src="static/script.js"></script> 
+    <script>
+        // Detecta o protocolo, host e porta dinamicamente
+        const protocol = window.location.protocol; // Exemplo: 'http:' ou 'https:'
+        const host = window.location.hostname; // Exemplo: 'example.com'
+        const port = window.location.port; // Exemplo: '8080' (ou vazio para portas padrão)
+
+        // Constrói a URL base dinamicamente
+        const baseUrl = `${protocol}//${host}${port ? `:${port}` : ''}`;
+
+        // Substitui os links de exemplo com a URL dinâmica
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('code').forEach(codeElement => {
+                if (codeElement.textContent.includes('http://example.com')) {
+                    codeElement.textContent = codeElement.textContent.replace('http://example.com', baseUrl);
+                }
+            });
+
+            // Substitui as URLs nos comandos curl
+            document.querySelectorAll('pre.curl-text').forEach(preElement => {
+                if (preElement.textContent.includes('http://example.com')) {
+                    preElement.textContent = preElement.textContent.replace('http://example.com', baseUrl);
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>

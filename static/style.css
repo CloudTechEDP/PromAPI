@@ -1,0 +1,256 @@
+:root{
+    --bg: #f4f6f8;
+    --card: #fff;
+    --muted: #777;
+    --accent: #007bff;
+    --radius: 12px;
+}
+*{box-sizing:border-box}
+html {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1; /* Garante que o conteúdo ocupe toda a altura disponível */
+}
+/* ... (Seções :root, * e html permanecem as mesmas) ... */
+
+html, body {
+    height: 100%; 
+    margin: 0;
+    display: flex;
+    justify-content: center; /* Manter este aqui centraliza o conteúdo de html no eixo X */
+}
+
+body {
+    font-family: "Roboto", sans-serif;
+    background: var(--bg);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    /* justify-content: flex-start;  <-- REMOVIDO/ALTERADO */
+    justify-content: center; /* ✨ CORREÇÃO: Centraliza o .container no eixo X */
+    align-items: flex-start; /* ✨ NOVO: Garante que o conteúdo comece no topo (para respeitar o padding-top) */
+    padding-top: 1%; 
+}
+
+.container {
+    width: 70%; /* Usa 70% da largura da tela */
+    max-width: 1000px;
+    height: auto; /* Ajusta a altura do container para se adaptar ao conteúdo */
+    min-height: 80%; /* Define uma altura mínima para o container */
+    padding: 24px;
+    background: var(--card);
+    border-radius: var(--radius); /* Cantos arredondados */
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1); /* Adiciona sombra */
+}
+h1 {
+    text-align: center;
+    font-size: 28px;
+    margin-bottom: 18px;
+}
+textarea {
+    width: 100%;
+    height: 120px;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    margin-bottom: 20px;
+    resize: vertical;
+}
+.dashboard-container-home {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+}
+.dashboard-card-home {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 16px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+    transition: transform .16s ease, box-shadow .16s ease;
+}
+.dashboard-card-home:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 22px rgba(0,0,0,0.08);
+}
+.metric-name {
+    font-size: 18px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 10px;
+    cursor: pointer;
+    padding: 8px 6px;
+    border-radius: 8px;
+    transition: background 0.2s;
+}
+.metric-name:hover, .metric-name:focus{
+     background: rgba(0,0,0,0.45)
+ 
+}
+.metric-details {
+    display: none; 
+}
+.back-btn {
+    display: none !important;
+}
+pre.curl-text {
+    background: #f1f1f1;
+    padding: 10px;
+    border-radius: 8px;
+    overflow-x: auto;
+    font-size: 13px;
+    margin: 0;
+    cursor: pointer;
+    position: relative;
+    border: 1px solid #ccc; /* Adicionado borda para indicar o clique */
+    transition: border-color 0.2s;
+}
+pre.curl-text:hover {
+    border-color: var(--accent);
+}
+.footer {
+    text-align: center;
+    margin-top: 28px;
+    color: var(--muted);
+    font-size: 14px;
+}
+/* Modal styles */
+#modal {
+    display: none; 
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 9999;
+}
+#modal.show { display:flex !important }
+#modal-content {
+    background: var(--card);
+    padding: 30px;
+    border-radius: var(--radius);
+    width: 100%;
+    max-width: 900px; /* Aumentado em 70% */
+    box-shadow: 0 6px 30px rgba(0,0,0,0.35);
+    position: relative;
+}
+/* Feedback visual de cópia */
+.copy-feedback {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #008000;
+    background: #e6ffe6;
+    padding: 4px 8px;
+    border-radius: 4px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease-out;
+    z-index: 10;
+}
+.copy-feedback.show {
+    opacity: 1;
+}
+
+.modal-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: transparent;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    line-height: 1;
+    color: var(--muted);
+}
+.links-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 30px;
+}
+
+.link-item {
+    text-align: center;
+    padding: 20px;
+    border: 1px solid var(--accent);
+    border-radius: var(--radius);
+    background: var(--card);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.link-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+
+
+.modern-button:hover {
+    background: #0056b3;
+}
+
+.modern-button:active {
+    background: #003f8a; /* Cor mais escura ao clicar */
+    transform: scale(0.98); /* Efeito de clique */
+}
+@media (max-width:920px){
+    #modal-content {
+        max-width: 90%;
+    }
+}
+@media (max-width:520px){
+    h1{font-size:22px}
+}
+
+
+
+
+.links-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 30px;
+}
+
+.link-item {
+    text-align: center;
+    padding: 20px;
+    border: 1px solid var(--accent);
+    border-radius: var(--radius);
+    background: var(--card);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.link-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.modern-button {
+    display: inline-block;
+    padding: 10px 20px;
+    margin-top: 10px;
+    font-size: 16px;
+    color: #fff;
+    background: var(--accent);
+    border: none;
+    border-radius: var(--radius);
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+}
+
+.modern-button:hover {
+    background: #0056b3;
+}
+
+.modern-button:active {
+    background: #003f8a; /* Cor mais escura ao clicar */
+    transform: scale(0.98); /* Efeito de clique */
+}

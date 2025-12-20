@@ -1,0 +1,15 @@
+fastapi
+uvicorn
+gunicorn
+pydantic
+
+pyodbc
+mysql.connector
+python-dotenv
+a2wsgi
+kafka-python
+six
+# logging
+elasticsearch
+prometheus-client
+sqlalchemy
