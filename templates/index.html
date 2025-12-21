@@ -10,15 +10,21 @@
 </head>
 <body>
     <div class="container">
-        <h1>PromAPI — The ultimate Prometheus API</h1>
-        <div class="link-item">
-            <p>Projeto Open Source para consolidar o envio de métricas para o prometheus</p>
-            <p>juntando as funcoes do pushgateway e do Aggregation gateway em um sistema unico.</p>
-            <p> simples de usar e simples para persistência dos dados</p>
+   
+        <div class="link-item" style="display: flex; align-items: center; justify-content: flex-start; gap: 24px; text-align: left;">
+            <img src="/static/img/logo.png" alt="Logo PromAPI" style="height: 200px; width: auto; margin-right: 0;" />
+            <div>
+                <h1 style="margin: 0;">PromAPI — The ultimate Prometheus API</h1>
+                <p>Projeto Open Source para consolidar o envio de métricas para o Prometheus</p>
+                <p>juntando as funções do pushgateway e do Aggregation gateway em um sistema único.</p>
+                <p>simples de usar e simples para persistência dos dados</p>
+            </div>
         </div>
         <br>
-
-
+        <div class="links-item">
+            <h1 style="margin: 0;">Clique nos exemplos e comece o envio das suas métricas</h1>
+        </div>
+        <br>
         <div class="dashboard-container-home" id="metrics-list">
             <div class="link-item">
                 <div class="metric-name modern-button" tabindex="0" role="button" aria-controls="modal-content" >Aggregate Metric</div>
@@ -55,26 +61,20 @@
                 </div>
             </div>
         </div>
-        
         <br>
-
-        <div class="links-item">
-            <h2>Clique nos exemplos e comece o envio das suas metricas.</h2>
-
-        </div>
 
         <div class="links-container">
             <div class="link-item">
-                <h2>Swagger API Documentation</h2>
-                <p>Swagger nao funcionou com o formato exigido pelo prometheus....</p>
-                <p>Alguem tem alguma ideia ???</p>
-                <p>Contribua !.</p>
                 <a href="/docs" class="modern-button">Acessar Swagger</a>
+                <h2>Swagger API Documentation</h2>
+                <p>Swagger não funcionou com o formato exigido pelo prometheus....</p>
+                <p>Alguém tem alguma ideia???</p>
+                <p>Contribua!.</p>
             </div>
             <div class="link-item">
+                <a href="/metrics" class="modern-button">Acessar Métricas</a>
                 <h2>Metrics Endpoint</h2>
                 <p>Visualize as métricas expostas pela aplicação para monitoramento e análise.</p>
-                <a href="/metrics" class="modern-button">Acessar Métricas</a>
             </div>
         </div>
 
