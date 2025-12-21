@@ -30,8 +30,16 @@
                 <div class="metric-name modern-button" tabindex="0" role="button" aria-controls="modal-content" >Aggregate Metric</div>
                 <div class="metric-details" aria-hidden="true">
                     <p><strong>Descrição:</strong> Agregador de valores, novos valores serão somados à métrica existente.</p>
-             
-                    <p><strong>Exemplo CURL (Clique para Copiar):</strong></p>
+                    <p><strong>PromQL:</strong> <code>increase(aggregate_total[1m])</code> ou <code>aggregate_total</code></p>
+                    <div style="margin-top: 8px;">
+                        <strong>Gráficos recomendados (Grafana):</strong>
+                        <ul style="margin: 6px 0 0 18px; padding: 0;">
+                            <li>Time series</li>
+                            <li>Bar chart</li>
+                            <li>Table (múltiplas labels)</li>
+                        </ul>
+                    </div>
+                    <p><strong>Exemplo CURL:</strong></p>
                     <pre class="curl-text" tabindex="0">echo "aggregate_total{type="counter", label1="job", label2="instance"} 1" | curl --data-binary @- http://example.com/metrics/job/aggregate/myjob</pre>
                     <br>
                 </div>
@@ -44,8 +52,18 @@
                     <p><strong>Type:</strong> counter</p>
                     <p><strong>Descrição:</strong> Uma métrica cumulativa que só pode aumentar ou ser redefinida para zero. Ideal para contagem de requisições ou erros.</p>
                     <p><strong>Endpoint:</strong> <code>http://example.com/metrics/job/counter/myjob</code></p>
-                    <p><strong>Exemplo CURL (Clique para Copiar):</strong></p>
+                    <p><strong>PromQL:</strong> <code>increase(simple_counter_total[5m])</code> ou <code>rate(simple_counter_total[5m])</code></p>
+                    <div style="margin-top: 8px;">
+                        <strong>Gráficos recomendados (Grafana):</strong>
+                        <ul style="margin: 6px 0 0 18px; padding: 0;">
+                            <li>Time series</li>
+                            <li>Bar chart</li>
+                            <li>Stat (total acumulado)</li>
+                        </ul>
+                    </div>
+                    <p><strong>Exemplo CURL:</strong></p>
                     <pre class="curl-text" tabindex="0">echo "simple_counter_total{label1="job", label2="instance"} 1" | curl --data-binary @- http://example.com/metrics/job/counter/myjob</pre>
+                    <br>
                 </div>
             </div>
 
@@ -56,8 +74,18 @@
                     <p><strong>Type:</strong> gauge</p>
                     <p><strong>Descrição:</strong> Uma métrica que representa um único valor numérico que pode aumentar ou diminuir arbitrariamente. Ideal para temperatura, uso de memória ou contagem de usuários ativos.</p>
                     <p><strong>Endpoint:</strong> <code>http://example.com/metrics/job/gauge/myjob</code></p>
-                    <p><strong>Exemplo CURL (Clique para Copiar):</strong></p>
+                    <p><strong>PromQL:</strong> <code>gauge_metrics</code></p>
+                    <div style="margin-top: 8px;">
+                        <strong>Gráficos recomendados (Grafana):</strong>
+                        <ul style="margin: 6px 0 0 18px; padding: 0;">
+                            <li>Gauge</li>
+                            <li>Stat</li>
+                            <li>Time series</li>
+                        </ul>
+                    </div>
+                    <p><strong>Exemplo CURL:</strong></p>
                     <pre class="curl-text" tabindex="0"> echo "gauge_metrics{label1="job", label2="instance"} 17" | curl --data-binary @- http://example.com/metrics/job/gauge/myjob</pre>
+                    <br>
                 </div>
             </div>
         </div>

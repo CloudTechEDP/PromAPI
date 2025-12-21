@@ -1,7 +1,5 @@
-// Elementos principais
 const modal = document.getElementById('modal');
 const modalContent = document.getElementById('modal-content');
-// Obtém o botão de fechar dentro do modalContent para garantir que ele exista
 const modalCloseBtn = modalContent ? modalContent.querySelector('.modal-close') : null;
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -36,9 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.key === 'Escape' && modal && modal.classList.contains('show')) closeModal();
     });
 
-    // 3. Listener para copiar texto CURL nos elementos pré-existentes
-    document.querySelectorAll('pre.curl-text').forEach(pre => pre.addEventListener('click', () => copyToClipboard(pre)));
-
+ 
     document.querySelectorAll('code').forEach(codeElement => {
         if (codeElement.textContent.includes('http://example.com')) {
             codeElement.textContent = codeElement.textContent.replace('http://example.com', baseUrl);
@@ -78,10 +74,28 @@ function openModalWithDetails(nameElement) {
     detailsClone.style.display = 'block'; 
     detailsClone.removeAttribute('aria-hidden');
 
+    // Quebra de linha automática no exemplo CURL
+    const curlPre = detailsClone.querySelector('pre.curl-text');
+    if (curlPre) {
+        curlPre.style.whiteSpace = 'pre-wrap';
+        curlPre.style.wordBreak = 'break-all';
+    }
+
     modalContent.appendChild(detailsClone);
 
-    // Adiciona o listener para copiar o CURL DENTRO da modal (conteúdo clonado)
-    modalContent.querySelectorAll('pre.curl-text').forEach(pre => pre.addEventListener('click', () => copyToClipboard(pre)));
+    // Botão copiar (mantém como antes)
+    if (curlPre) {
+        const copyBtn = document.createElement('button');
+        copyBtn.textContent = '📋 Copiar CURL';
+        copyBtn.className = 'modal-copy-btn';
+        copyBtn.style = `display: block; margin: 5px auto 0 auto; background: #007bff; color: #fff; border: none; border-radius: 50px; padding: 8px 16px; font-size: 14px; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.10); z-index: 20;`;
+        copyBtn.addEventListener('click', () => {
+            copyTextToClipboard(curlPre.textContent);
+            showCopyFeedback(copyBtn);
+        });
+        modalContent.appendChild(copyBtn);
+        modalContent.style.position = 'relative';
+    }
 
     // Atualiza o aria-label do modal
     const metricNameText = nameElement.textContent.trim();
@@ -92,6 +106,41 @@ function openModalWithDetails(nameElement) {
     modal.setAttribute('aria-hidden', 'false');
 }
 
+// Função para copiar texto para a área de transferência
+function copyTextToClipboard(text) {
+    if (!text) return;
+    if (navigator.clipboard) {
+        navigator.clipboard.writeText(text.trim());
+    } else {
+        const tempTextarea = document.createElement('textarea');
+        tempTextarea.value = text.trim();
+        tempTextarea.style.position = 'fixed';
+        tempTextarea.style.opacity = '0';
+        document.body.appendChild(tempTextarea);
+        tempTextarea.focus();
+        tempTextarea.select();
+        try {
+            document.execCommand('copy');
+        } catch (err) {}
+        document.body.removeChild(tempTextarea);
+    }
+}
+
+function showCopyFeedback(btn) {
+    let feedback = btn.parentElement.querySelector('.copy-feedback-modal');
+    if (!feedback) {
+        feedback = document.createElement('span');
+        feedback.className = 'copy-feedback-modal';
+        feedback.style = 'position: absolute; right: 24px; bottom: 48px; background: #e6ffe6; color: #008000; font-size: 13px; font-weight: 700; border-radius: 6px; padding: 6px 14px; opacity: 0; transition: opacity 0.3s; z-index: 30; pointer-events: none;';
+        btn.parentElement.appendChild(feedback);
+    }
+    feedback.textContent = 'Exemplo copiado!';
+    feedback.style.opacity = '1';
+    setTimeout(() => {
+        feedback.style.opacity = '0';
+    }, 1200);
+}
+
 /**
  * Fecha a modal.
  */
@@ -99,86 +148,4 @@ function closeModal() {
     if (!modal) return;
     modal.classList.remove('show');
     modal.setAttribute('aria-hidden', 'true');
-}
-
-/**
- * Exibe o feedback visual de sucesso na cópia.
- * @param {HTMLElement} preElement - O elemento <pre> onde o feedback será exibido.
- */
-function handleCopySuccess(preElement) {
-    // 1. Cria ou exibe o feedback visual
-    let feedback = preElement.querySelector('.copy-feedback');
-    if (!feedback) {
-        feedback = document.createElement('span');
-        feedback.classList.add('copy-feedback');
-        preElement.appendChild(feedback);
-    }
-    feedback.textContent = 'Copiado!';
-    
-    // Ativa o display do feedback
-    feedback.classList.add('show');
-
-    // 2. Remove o feedback após 1.2 segundos
-    setTimeout(() => {
-        feedback.classList.remove('show');
-    }, 1200);
-}
-
-/**
- * Método de fallback para cópia usando document.execCommand.
- * @param {HTMLElement} preElement - O elemento <pre> a ser copiado.
- * @param {string} text - O texto a ser copiado.
- */
-function handleCopyFallback(preElement, text) {
-    // Cria um textarea temporário, copia, e remove.
-    const tempTextarea = document.createElement('textarea');
-    tempTextarea.value = text;
-    // Estilos para evitar problemas de visualização ou rolagem
-    tempTextarea.style.position = 'fixed'; 
-    tempTextarea.style.opacity = '0';
-    document.body.appendChild(tempTextarea);
-    
-    tempTextarea.focus();
-    tempTextarea.select();
-
-    try {
-        const successful = document.execCommand('copy');
-        if (successful) {
-            handleCopySuccess(preElement);
-        } else {
-            alert('Não foi possível copiar automaticamente. Por favor, pressione Ctrl+C / Cmd+C.');
-        }
-    } catch (err) {
-        console.error('Fallback copy failed', err);
-        alert('Falha total ao copiar. Por favor, pressione Ctrl+C / Cmd+C.');
-    }
-
-    document.body.removeChild(tempTextarea);
-}
-
-
-/**
- * Copia o conteúdo de um elemento <pre> para a área de transferência e dá feedback visual.
- * @param {HTMLElement} preElement - O elemento <pre> a ser copiado.
- */
-function copyToClipboard(preElement) {
-    if (!preElement || !preElement.textContent) {
-        alert('O elemento de texto está vazio.');
-        return;
-    }
-    
-    const text = preElement.textContent.trim();
-    
-    // 1. Tenta usar a API moderna (navigator.clipboard)
-    if (navigator.clipboard) {
-        navigator.clipboard.writeText(text).then(() => {
-            handleCopySuccess(preElement);
-        }).catch(() => {
-            // Se falhar (ex: file:// context), tenta o fallback
-            handleCopyFallback(preElement, text);
-        });
-    } else {
-        // 2. Se a API não existir, tenta o fallback
-        handleCopyFallback(preElement, text);
-    }
 }
