@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualização de Erros</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="static/style.css"> 
+
+</head>
+<body>
+    <div class="container">
+        <div class="link-item" style="display: flex; align-items: center; justify-content: flex-start; text-align: left; flex-direction: column;">
+            <div style="margin-bottom: 24px; width: 100%; text-align: left;">
+                <a href="/" class="modern-button">← Voltar</a>
+            </div>
+            {% if error_message and error_message is iterable and error_message|length > 0 and error_message[0] is mapping %}
+                {% for item in error_message %}
+                <div class="link-item" style="margin-bottom: 18px; background: #fff3f3; border-radius: 8px; padding: 12px 18px; border: 1px solid #e57373; width: 100%; text-align: left;">
+                    <div style="text-align: left;">
+                        <p><strong>Mensagem de erro:</strong> {{ item.error_message }}<br></p>
+                        <p><strong>Métrica enviada:</strong> <code>{{ item.raw_body }}</code><br></p>
+                        <p><strong>Sugestão IA:</strong> {{ item.ia_solution }}<br></p>
+                        <p><strong>Timestamp:</strong> {{ item.timestamp }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <h2>Nenhum erro encontrado.</h2>
+            {% endif %}
+        </div>
+        <br>
+        <div style="display: flex; justify-content: center;">
+            <div class="footer">
+                🚀 &copy; 2026 PromAPI — The ultimate Prometheus API 🌟<br>
+                📧 Email: <a href="mailto:celio.jesus01@outlook.com">celio.jesus01@outlook.com</a><br>
+                🔗 LinkedIn: <a href="https://www.linkedin.com/in/celio-jesus" target="_blank">linkedin.com/in/celiojesus01</a><br>
+                💻 GitHub: <a href="https://github.com/CloudTechEDP" target="_blank">https://github.com/CloudTechEDP</a>
+            </div>
+    </div>
+    <script src="static/script.js"></script> 
+</body>
+</html>

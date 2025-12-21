@@ -13,3 +13,5 @@ six
 elasticsearch
 prometheus-client
 sqlalchemy
+jinja2
+openai

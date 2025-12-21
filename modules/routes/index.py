@@ -66,10 +66,12 @@ async def get_all_metrics():
         else:
             response.append(f'{c.metric}{{ts="{unique_label}"}} {valc}')
 
+    if not response:
+        response.append("# No metrics available")
     return '\n'.join(response)
 
 @router.get("/error")
-async def get_error_logs():
+async def get_error_logs(request: Request):
     db = SessionLocal()
     logs = db.query(error_logs).order_by(error_logs.timestamp.desc()).all()
     db.close()
@@ -82,7 +84,9 @@ async def get_error_logs():
             "ia_solution": log.ia_solution,
             "timestamp": log.timestamp.isoformat()
         })
-    return response
+    templates = Jinja2Templates(directory="templates")
+    return templates.TemplateResponse("error.html", {"request": request, "error_message": response})
+
 
 
 @router.get("/metrics/types")

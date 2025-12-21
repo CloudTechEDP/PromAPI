@@ -1,6 +1,4 @@
 from modules.middleware.master import *
-from fastapi.responses import StreamingResponse
-import asyncio
 
 router = APIRouter()
 @router.post("/metrics/job/counter/{job_name}")
