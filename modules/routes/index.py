@@ -60,9 +60,9 @@ async def get_all_metrics():
             response.append(f"# TYPE {c.metric} counter")
             emitted_types.add(c.metric)
         
-        unique_label = datetime.now().strftime("%Y%m%dT%H%M%S_%f")
+        # unique_label = datetime.now().strftime("%Y%m%dT%H%M%S_%f")
         if labels:
-            labels["ts"] = unique_label
+            # labels["ts"] = unique_label
             labels_str = ', '.join([f'{k}="{v}"' for k, v in labels.items()])
             response.append(f'{c.metric}{{{labels_str}}} {valc}')
         else:

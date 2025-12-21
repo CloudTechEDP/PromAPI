@@ -40,7 +40,7 @@
                         </ul>
                     </div>
                     <p><strong>Exemplo CURL:</strong></p>
-                    <pre class="curl-text" tabindex="0">echo "aggregate_total{type="counter", label1="job", label2="instance"} 1" | curl --data-binary @- http://example.com/metrics/job/aggregate/myjob</pre>
+                    <pre class="curl-text" tabindex="0">echo aggregate_total{type="counter", label1="job", label2="instance"} 1 | curl --data-binary @- http://example.com/metrics/job/aggregate/myjob</pre>
                     <br>
                 </div>
             </div>
@@ -62,7 +62,7 @@
                         </ul>
                     </div>
                     <p><strong>Exemplo CURL:</strong></p>
-                    <pre class="curl-text" tabindex="0">echo "simple_counter_total{label1="job", label2="instance"} 1" | curl --data-binary @- http://example.com/metrics/job/counter/myjob</pre>
+                    <pre class="curl-text" tabindex="0">echo simple_counter_total{label1="job", label2="instance"} 1 | curl --data-binary @- http://example.com/metrics/job/counter/myjob</pre>
                     <br>
                 </div>
             </div>
@@ -84,7 +84,7 @@
                         </ul>
                     </div>
                     <p><strong>Exemplo CURL:</strong></p>
-                    <pre class="curl-text" tabindex="0"> echo "gauge_metrics{label1="job", label2="instance"} 17" | curl --data-binary @- http://example.com/metrics/job/gauge/myjob</pre>
+                    <pre class="curl-text" tabindex="0"> echo gauge_metrics{label1="job", label2="instance"} 17 | curl --data-binary @- http://example.com/metrics/job/gauge/myjob</pre>
                     <br>
                 </div>
             </div>
