@@ -30,7 +30,13 @@ class AggregateTable(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
     
 
-
+class error_logs(Base):
+    __tablename__ = "ErrorLogs"
+    id = Column(Integer, primary_key=True)
+    error_message = Column(String(500), nullable=False)
+    raw_body = Column(String(2000), nullable=False)
+    ia_solution = Column(String(2000), nullable=True)
+    timestamp = Column(DateTime, default=datetime.utcnow)
 
 class histogram_metrics(Base):
     __tablename__ = "histogram_metric"

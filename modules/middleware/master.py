@@ -23,7 +23,7 @@ from modules.middleware.print_response import *
 
 from modules.model.model import *
 from modules.repository.db import *
-
+from modules.middleware.openrouter_free import *
 from modules.api.gauge import router as gauge_router
 from modules.api.counter import router as counter_router
 from modules.api.aggregate import router as aggregate_router

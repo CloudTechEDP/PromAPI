@@ -38,3 +38,23 @@ def update_metric(existing_metric, value: float, db):
         "value": existing_metric.value,
         "labels": existing_metric.labels
     }
+
+def log_error(error_message: str, raw_body: str, ia_solution: str):
+    db = SessionLocal()
+    error_log = error_logs(
+        error_message=error_message,
+        raw_body=raw_body,
+        ia_solution=ia_solution
+    )
+    db.add(error_log)
+    db.commit()
+    db.refresh(error_log)
+    db.close()
+    return {
+        "status": "logged",
+        "id": error_log.id,
+        "error_message": error_log.error_message,
+        "raw_body": error_log.raw_body,
+        "ia_solution": error_log.ia_solution,
+        "timestamp": error_log.timestamp
+    }

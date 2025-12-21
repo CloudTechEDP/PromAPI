@@ -68,6 +68,23 @@ async def get_all_metrics():
 
     return '\n'.join(response)
 
+@router.get("/error")
+async def get_error_logs():
+    db = SessionLocal()
+    logs = db.query(error_logs).order_by(error_logs.timestamp.desc()).all()
+    db.close()
+    response = []
+    for log in logs:
+        response.append({
+            "id": log.id,
+            "error_message": log.error_message,
+            "raw_body": log.raw_body,
+            "ia_solution": log.ia_solution,
+            "timestamp": log.timestamp.isoformat()
+        })
+    return response
+
+
 @router.get("/metrics/types")
 async def get_metric_types():
     db = SessionLocal()
