@@ -4,6 +4,7 @@ import sys
 from util.ErrorMessages import error_message_box
 from util.ExtractFiles import extract_embedded_files
 from util.winService import *
+from util.LinuxService import *
 from util.DetectPlataform import plataform_detect
 import webbrowser
 
@@ -21,7 +22,8 @@ if __name__ == "__main__":
     if sistema == "Windows":
         win_service_setup(service_args='--service')
     elif sistema == "Linux":
-        print("Sistema Linux")
+        linux_service_setup()
+        print("Linux service setup complete.")
     else:
         print("Outro sistema:", sistema)
 
