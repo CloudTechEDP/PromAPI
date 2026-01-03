@@ -1,6 +1,6 @@
 from modules.middleware.master import *
 from modules.model.model import *
-
+os.makedirs("database", exist_ok=True)
 engine = create_engine("sqlite:///database/metrics.db", echo=False)
 SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False)
 Base.metadata.create_all(bind=engine)
