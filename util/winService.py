@@ -28,7 +28,7 @@ from util.ErrorMessages import error_message_box
 
 
 
-def win_service_setup(service_args='--service'):
+def win_service_setup():
     import win32serviceutil
     import win32service
     import win32event
@@ -66,7 +66,7 @@ def win_service_setup(service_args='--service'):
                 displayName=SERVICE_DISPLAY_NAME,
                 startType=win32service.SERVICE_AUTO_START,
                 exeName=script_path,
-                exeArgs=service_args,
+                exeArgs='start',
                 description="Prometheus API Service"
             )
             error_message_box(f"Serviço {SERVICE_NAME} instalado com sucesso.")
@@ -74,3 +74,11 @@ def win_service_setup(service_args='--service'):
             tb = traceback.format_exc()
             error_message_box(f"Erro ao instalar o serviço: {e}\n{tb}")
             return
+
+def win_service_start():
+    import win32serviceutil
+    SERVICE_NAME = "PromAPI"
+    try:
+        win32serviceutil.StartService(SERVICE_NAME)
+    except Exception as e:
+        error_message_box(f"Erro ao iniciar o serviço {SERVICE_NAME}: {e}")

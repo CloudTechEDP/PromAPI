@@ -6,7 +6,7 @@ from util.ErrorMessages import error_message_box
 
 exe_dir = os.path.abspath(os.path.dirname(sys.argv[0]))
 service_name = "promapi"
-exec_start = f"{exe_dir}/PromAPI"
+exec_start = f"{exe_dir}/PromAPI start"
 description="promapi"
 user="root"
 
