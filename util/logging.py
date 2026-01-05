@@ -17,7 +17,7 @@ def logging_app():
         mes = hoje.month
         # Garante que o diretório logs será criado na raiz do projeto
         # root_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
-        root_dir = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+        root_dir = os.path.abspath(os.path.dirname(sys.argv[0]))
         log_dir = os.path.join(root_dir, "logs")
         print(f"[LOGGING] Diretório de logs será: {log_dir}")
         os.makedirs(log_dir, exist_ok=True)

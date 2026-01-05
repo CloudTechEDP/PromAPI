@@ -15,7 +15,7 @@ def extract_embedded_files():
         else:
             base_path = os.path.abspath(".")
 
-        dirs_to_copy = ["templates", "static", "modules"]
+        dirs_to_copy = ["templates", "static", "modules", "util"]
 
         for d in dirs_to_copy:
             src = os.path.join(base_path, d)

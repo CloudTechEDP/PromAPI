@@ -1,84 +1,45 @@
-def service_exists_and_path(service_name, exe_path):
-    import win32serviceutil
-    import win32service
-    import pywintypes
-    try:
-        # Verifica se o serviço existe
-        status = win32serviceutil.QueryServiceStatus(service_name)
-    except Exception:
-        return False, None
-    try:
-        # Abre o gerenciador de controle de serviço
-        hscm = win32service.OpenSCManager(None, None, win32service.SC_MANAGER_ALL_ACCESS)
-        hsrv = win32service.OpenService(hscm, service_name, win32service.SERVICE_QUERY_CONFIG)
-        config = win32service.QueryServiceConfig(hsrv)
-        win32service.CloseServiceHandle(hsrv)
-        win32service.CloseServiceHandle(hscm)
-        # config[3] é o caminho do executável
-        exe_on_service = config[3].strip('"')
-        return True, exe_on_service == exe_path
-    except pywintypes.error:
-        return True, None
-
-
-import sys
 import os
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+import win32serviceutil
+import sys
 from util.ErrorMessages import error_message_box
+SERVICE_NAME = "PromAPI"
+SERVICE_DISPLAY_NAME = "PromAPI"
+ROOT_DIR = os.path.abspath(os.path.dirname(sys.argv[0]))
+UTIL_DIR = os.path.join(ROOT_DIR, "util")
 
-
+def service_exists_and_path():
+    try:
+        status = win32serviceutil.QueryServiceStatus(SERVICE_NAME)
+        return True
+    except Exception:
+        return False
 
 def win_service_setup():
-    import win32serviceutil
-    import win32service
-    import win32event
-    import servicemanager
-    import sys
-    import os
+    createfile = f"""
+    <service>
+        <id>{SERVICE_NAME}</id>
+        <name>{SERVICE_NAME}</name>
+        <description>{SERVICE_NAME} Service</description>
 
-    import traceback
-    import os
-    SERVICE_NAME = "PromAPI"
-    SERVICE_DISPLAY_NAME = "PromAPI"
+        <executable>{ROOT_DIR}\PromAPI.exe</executable>
+        <arguments>start</arguments>
+        <workingdirectory>{ROOT_DIR}</workingdirectory>
 
-    # Caminho absoluto do executável
-    import traceback
-    exe_dir = os.path.abspath(os.path.dirname(sys.argv[0]))
-    script_path = os.path.join(exe_dir, "PromAPI.exe")
+        <logmode>rotate</logmode>
 
-    if not os.path.exists(script_path):
-        error_message_box(f"PromAPI.exe não encontrado em: {script_path}")
-        return
-    
-    exists, path_ok = service_exists_and_path(SERVICE_NAME, script_path)
-    if exists:
-        if path_ok:
-            error_message_box(f"O serviço {SERVICE_NAME} já existe e aponta para o executável correto. Não será reinstalado.")
-            return
-        else:
-            error_message_box(f"O serviço {SERVICE_NAME} já existe, mas aponta para outro executável. Remova ou ajuste manualmente.")
-            return
-    else:
-        try:
-            win32serviceutil.InstallService(
-                pythonClassString=None,
-                serviceName=SERVICE_NAME,
-                displayName=SERVICE_DISPLAY_NAME,
-                startType=win32service.SERVICE_AUTO_START,
-                exeName=script_path,
-                exeArgs='start',
-                description="Prometheus API Service"
-            )
-            error_message_box(f"Serviço {SERVICE_NAME} instalado com sucesso.")
-        except Exception as e:
-            tb = traceback.format_exc()
-            error_message_box(f"Erro ao instalar o serviço: {e}\n{tb}")
-            return
+        <onfailure action="restart" delay="15 sec"/>
+    </service>
+    """
+    service_file_path = os.path.join(UTIL_DIR, "WinSW.xml")
+    with open(service_file_path, "w") as f:
+        f.write(createfile)
+    comandline = f'{UTIL_DIR}\\WinSW.exe install'
+    os.system(comandline) # Executa o comando para instalar o serviço
 
 def win_service_start():
-    import win32serviceutil
-    SERVICE_NAME = "PromAPI"
-    try:
-        win32serviceutil.StartService(SERVICE_NAME)
-    except Exception as e:
-        error_message_box(f"Erro ao iniciar o serviço {SERVICE_NAME}: {e}")
+    comandline = f'{UTIL_DIR}\\WinSW.exe start'
+    os.system(comandline) # Executa o comando para iniciar o serviço
+    error_message_box("Serviço PromAPI iniciado com sucesso!\n" \
+    "aguarde alguns segundos enquanto a aplicação é carregada.\n" \
+    "\n" \
+    "Você pode acessar a aplicação em: http://localhost:8000 logo apos fechar essa janela")
