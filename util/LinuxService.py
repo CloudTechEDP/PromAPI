@@ -33,7 +33,7 @@ def linux_service_setup():
     with open(service_file_path, 'w') as service_file:
         service_file.write(service_file_content)
     subprocess.run(['systemctl', 'daemon-reload'], check=True)
-    # subprocess.run(['systemctl', 'enable', service_name], check=True)
-    # subprocess.run(['systemctl', 'start', service_name], check=True)
+    subprocess.run(['systemctl', 'enable', service_name], check=True)
+    subprocess.run(['systemctl', 'start', service_name], check=True)
     print(f"Service {service_name} has been set up and started.")
     return 
