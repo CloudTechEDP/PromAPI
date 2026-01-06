@@ -20,8 +20,12 @@ async def increase_aggregate_metric(job_name: str, request: Request):
         value = float(value)
         print_response(f"Parsed counter metric: name={counter_name}, labels={labels}, value={value}")
         response = []
-        db = SessionLocal()
-        existing_metric = db.query(AggregateTable).filter_by(metric=counter_name, labels=labels).first()
+        try:
+            db = SessionLocal()
+            existing_metric = db.query(AggregateTable).filter_by(metric=counter_name, labels=labels).first()
+        except Exception as db_exc:
+            print_response(f"Database error: {str(db_exc)}")
+            db.close()
 
         if existing_metric:
             current_value = existing_metric.value
