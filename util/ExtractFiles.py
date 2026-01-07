@@ -21,8 +21,6 @@ def extract_embedded_files():
             src = os.path.join(base_path, d)
             dst = os.path.join(target_dir, d)
             if os.path.exists(src):
-                # if os.path.exists(dst):
-                #     shutil.rmtree(dst)
                 shutil.copytree(src, dst, dirs_exist_ok=True)
                 os.chmod(os.path.join(dst), permission)
                 for file in os.listdir(dst):

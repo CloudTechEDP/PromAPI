@@ -9,7 +9,7 @@ UTIL_DIR = os.path.join(ROOT_DIR, "util")
 
 def service_exists_and_path():
     try:
-        status = win32serviceutil.QueryServiceStatus(SERVICE_NAME)
+        win32serviceutil.QueryServiceStatus(SERVICE_NAME)
         return True
     except Exception:
         return False

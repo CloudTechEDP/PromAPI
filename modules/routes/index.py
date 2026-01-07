@@ -3,10 +3,6 @@ from modules.middleware.master import *
 router = APIRouter()
 @router.get("/", response_class=HTMLResponse)
 async def read_root():
-    # with open("templates/index.html", encoding="utf-8") as f:
-    #     html = f.read()
-    # return HTMLResponse(content=html, status_code=200)
-
     templates = Jinja2Templates(directory="templates")
     return templates.TemplateResponse("index.html", {"request": {}})
 

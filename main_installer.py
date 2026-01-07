@@ -1,12 +1,12 @@
 
 
 
-from util.logging import *
+from util.logging import logging
 import sys
 from util.ErrorMessages import error_message_box
 from util.ExtractFiles import extract_embedded_files
-from util.winService import *
-from util.LinuxService import *
+from util.winService import win_service_setup, win_service_start, service_exists_and_path
+from util.LinuxService import linux_service_setup
 from util.DetectPlataform import plataform_detect
 args = sys.argv[1:]
 logging.info("Argumentos recebidos: %s", args)
