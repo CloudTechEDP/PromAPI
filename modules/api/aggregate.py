@@ -28,7 +28,7 @@ async def increase_aggregate_metric(job_name: str, request: Request):
             value = new_value
             response = update_metric(existing_metric, value, db)
         else:
-             db.close()
+            db.close()
             table_class = AggregateTable
             response = add_metric_counter(table_class, counter_name, value, labels)
         return response
