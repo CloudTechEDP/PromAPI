@@ -13,27 +13,31 @@ user="root"
 
 
 def linux_service_setup():
-    import os
-    import subprocess
+    try:
+        import os
+        import subprocess
 
-    service_file_content = f"""[Unit]
-    [Unit]
-    Description={description}
-    After=network.target
-    [Service]
-    Type=simple
-    User={user}
-    ExecStart={exec_start}
-    Restart=on-failure
-    [Install]
-    WantedBy=multi-user.target  
-    """
+        service_file_content = f"""
+        [Unit]
+        Description={description}
+        After=network.target
+        [Service]
+        Type=simple
+        User={user}
+        ExecStart={exec_start}
+        Restart=on-failure
+        [Install]
+        WantedBy=multi-user.target  
+        """
 
-    service_file_path = f"/etc/systemd/system/{service_name}.service"
-    with open(service_file_path, 'w') as service_file:
-        service_file.write(service_file_content)
-    subprocess.run(['systemctl', 'daemon-reload'], check=True)
-    subprocess.run(['systemctl', 'enable', service_name], check=True)
-    subprocess.run(['systemctl', 'start', service_name], check=True)
-    print(f"Service {service_name} has been set up and started.")
-    return 
+        service_file_path = f"/etc/systemd/system/{service_name}.service"
+        with open(service_file_path, 'w') as service_file:
+            service_file.write(service_file_content)
+        subprocess.run(['systemctl', 'daemon-reload'], check=True)
+        subprocess.run(['systemctl', 'enable', service_name], check=True)
+        subprocess.run(['systemctl', 'start', service_name], check=True)
+        print(f"Service {service_name} has been set up and started.")
+        return 
+    except Exception as e:
+        error_message_box(f"Failed to set up Linux service: {e}")
+        return
