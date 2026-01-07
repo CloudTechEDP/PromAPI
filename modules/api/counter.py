@@ -3,6 +3,20 @@ from modules.middleware.master import *
 router = APIRouter()
 @router.post("/metrics/job/counter/{job_name}")
 async def receive_counter_metric(job_name: str, request: Request):
+    """
+    Parse a Prometheus-style counter metric from the request body, add it to the counter table, and return the insertion result.
+    
+    The request body must contain a metric line like:
+        metric_name{key="value",other="v"} 123
+    This function extracts the metric name, optional labels, and numeric value, adds a generated "timestamp" label, and calls the metric storage routine. On error, returns a StreamingResponse that streams a diagnostic message (including an automated analysis) instead of the normal result.
+    
+    Parameters:
+        job_name (str): Job identifier from the request path; used to associate the metric with a job.
+        request (Request): Incoming HTTP request whose body contains the metric line described above.
+    
+    Returns:
+        The value returned by add_metric_counter (typically an insertion/acknowledgement response), or a StreamingResponse that yields diagnostic information when parsing or storage fails.
+    """
     raw_body = (await request.body()).decode()
     try:
         
@@ -27,6 +41,17 @@ async def receive_counter_metric(job_name: str, request: Request):
         error = str(exc)
         raw_body = raw_body.replace('\r', '').replace('\n', '')
         async def error_stream():
+            """
+            Yield diagnostic text chunks describing why the metric failed and a Gepeto analysis.
+            
+            This async generator produces a sequence of text fragments intended for streaming back to the client:
+            - First yields a Portuguese status message indicating the metric failed and Gepeto will be consulted.
+            - Then yields the analysis returned by ask_gepeto(error, raw_body).
+            - If an exception occurs while producing the analysis, yields a JSON-formatted error string with a "status" of "error" and a "detail" message.
+            
+            Returns:
+                str: Successive string chunks to stream to the client (status message, analysis, or error JSON).
+            """
             try:
                 yield 'Sua Metrica nao funcionou:\nVou usar o Gepeto para tentar entender o problema e propor uma solução...\n\n\n'
                 iause = ask_gepeto(error, raw_body)
@@ -34,5 +59,4 @@ async def receive_counter_metric(job_name: str, request: Request):
             except Exception as err:
                 yield f'{{"status": "error", "detail": "{str(err)}"}}\n'
         return StreamingResponse(error_stream(), media_type="text/json")
-
 

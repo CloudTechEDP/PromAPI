@@ -7,11 +7,27 @@ async def read_root():
     #     html = f.read()
     # return HTMLResponse(content=html, status_code=200)
 
+    """
+    Render the application's index page using Jinja2 templates.
+    
+    Renders the "index.html" template from the "templates" directory with an empty request context.
+    
+    Returns:
+        TemplateResponse: A response object rendering the "index.html" template.
+    """
     templates = Jinja2Templates(directory="templates")
     return templates.TemplateResponse("index.html", {"request": {}})
 
 @router.get("/metrics", response_class=PlainTextResponse)
 async def get_all_metrics():
+    """
+    Builds and returns a Prometheus-formatted metrics payload as a newline-separated string.
+    
+    This inspects stored gauge, aggregate (treated as counter), and counter metrics and emits metric lines and a single `# TYPE <metric> <type>` declaration for each metric name before its samples. Metric values that are whole-number floats are converted to integers. Metric labels stored as JSON strings are deserialized and rendered as `{key="value",...}`; when a counter has no labels, a `ts="<unique_label>"` label is added to the sample. If no metrics are found, the string contains the line `# No metrics available`.
+    
+    Returns:
+        str: Prometheus text-format lines joined by newline characters.
+    """
     db = SessionLocal()
     GaugeTable_list = db.query(GaugeTable).all()
     AggregateTable_list = db.query(AggregateTable).all()
@@ -75,6 +91,17 @@ async def get_all_metrics():
 
 @router.get("/error")
 async def get_error_logs(request: Request):
+    """
+    Render the error logs page populated from the database.
+    
+    Queries the `error_logs` table, orders entries by descending timestamp, and renders the "error.html" template with the retrieved logs.
+    
+    Parameters:
+        request (Request): FastAPI request object used for template rendering.
+    
+    Returns:
+        TemplateResponse: A response rendering "error.html" with context key "error_message" containing a list of log objects. Each log object includes `id`, `error_message`, `raw_body`, `ia_solution`, and `timestamp` (ISO 8601 string).
+    """
     db = SessionLocal()
     logs = db.query(error_logs).order_by(error_logs.timestamp.desc()).all()
     db.close()
@@ -94,6 +121,14 @@ async def get_error_logs(request: Request):
 
 @router.get("/metrics/types")
 async def get_metric_types():
+    """
+    Return a mapping of metric names to their metric type.
+    
+    Scans the application's metric tables and builds a dict where each key is a metric name and each value is its type (one of "gauge", "counter", "histogram", "summary", "info", "state_set", or "aggregate").
+    
+    Returns:
+        dict: Mapping from metric name (str) to metric type (str).
+    """
     db = SessionLocal()
     types = {}
     for m in db.query(GaugeTable).all():

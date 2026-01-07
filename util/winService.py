@@ -8,6 +8,12 @@ ROOT_DIR = os.path.abspath(os.path.dirname(sys.argv[0]))
 UTIL_DIR = os.path.join(ROOT_DIR, "util")
 
 def service_exists_and_path():
+    """
+    Check whether the Windows service identified by SERVICE_NAME is present and queryable.
+    
+    Returns:
+        bool: `True` if the service exists and its status could be queried, `False` otherwise.
+    """
     try:
         status = win32serviceutil.QueryServiceStatus(SERVICE_NAME)
         return True
@@ -15,6 +21,11 @@ def service_exists_and_path():
         return False
 
 def win_service_setup():
+    """
+    Create a WinSW XML configuration for the PromAPI service, write it to the utilities directory, and invoke the WinSW installer to install the service.
+    
+    Writes a file named "WinSW.xml" under UTIL_DIR containing the service definition (service id, name, description, executable path, arguments, working directory, log mode, and failure action), then runs the WinSW.exe install command in UTIL_DIR which attempts to install the Windows service. This function performs filesystem writes and executes an external system command.
+    """
     createfile = f"""
     <service>
         <id>{SERVICE_NAME}</id>
@@ -37,6 +48,11 @@ def win_service_setup():
     os.system(comandline) # Executa o comando para instalar o serviço
 
 def win_service_start():
+    """
+    Start the PromAPI Windows service and display a success message box with the local access URL.
+    
+    This function invokes the WinSW start command from the utilities directory to start the service, then shows a message informing the user that the service has been started and where to access the application.
+    """
     comandline = f'{UTIL_DIR}\\WinSW.exe start'
     os.system(comandline) # Executa o comando para iniciar o serviço
     error_message_box("Serviço PromAPI iniciado com sucesso!\n" \

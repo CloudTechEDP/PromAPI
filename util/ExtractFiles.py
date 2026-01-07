@@ -1,8 +1,15 @@
-
 import stat
 
 
 def extract_embedded_files():
+    """
+    Extracts bundled resource directories into the current working directory and sets permissive filesystem permissions.
+    
+    Copies any of the embedded resource directories ("templates", "static", "modules", "util") from the application's base path (or the frozen executable temporary path) into the current working directory and adjusts directory and file modes to allow read/write/execute for owner, group, and others. If an error occurs, displays a user-facing error message box describing the problem.
+    
+    Returns:
+        target_dir (str): The path to the target directory where files were extracted (typically "./").
+    """
     from util.ErrorMessages import error_message_box
     import shutil
     import sys

@@ -5,9 +5,9 @@ logging.info(" middleware Logs initialized.")
 
 def logging_app():
     """
-    Function to initialize logging middleware.
-    This function sets up logging for the application, creating a log file
-    in the logs directory with the current date as the filename.
+    Initialize application logging.
+    
+    Creates a "logs" directory adjacent to the executed script, builds a dated log filename that includes the log level, and configures Python logging to write to that file and to the console.
     """
     try:
         print("Initializing logging middleware...")

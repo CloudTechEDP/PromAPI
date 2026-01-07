@@ -13,6 +13,15 @@ user="root"
 
 
 def linux_service_setup():
+    """
+    Create and start a systemd service unit for the PromAPI executable.
+    
+    Writes a service unit file to /etc/systemd/system/{service_name}.service, reloads systemd, enables the service to start at boot, and starts the service immediately. Side effects include creating or overwriting the unit file and invoking systemctl commands.
+    
+    Raises:
+        OSError: If writing the service file fails.
+        subprocess.CalledProcessError: If any systemctl command returns a non-zero exit status.
+    """
     import os
     import subprocess
 

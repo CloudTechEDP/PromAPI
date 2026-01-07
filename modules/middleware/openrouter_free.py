@@ -4,6 +4,19 @@ API_TOKEN = os.getenv("OPENROUTER_API_KEY", "false_key")
 
 
 def ask_gepeto(error, raw_body):
+    """
+    Generate an AI-proposed, concise solution in Portuguese for a reported error and its POST payload.
+    
+    Parameters:
+        error: The original error message or exception to be analyzed.
+        raw_body: The raw POST payload (string or dict) associated with the error.
+    
+    Returns:
+        ia_solution (str): A Portuguese (ptbr) solution text (≈100 words) with one example of a correct metric submission.
+    
+    Notes:
+        If the OpenRouter API key is not configured, a warning message is emitted and no AI call is made. The function records the error and AI solution via log_error and prints the resulting database log ID.
+    """
     from openai import OpenAI
     if API_TOKEN == "false_key":
         return print_response("⚠️ OPENROUTER_API_KEY não está definido. O middleware OpenRouter Free não será carregado.")

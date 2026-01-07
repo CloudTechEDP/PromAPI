@@ -11,6 +11,14 @@ for rmdir in removedirs:
         import shutil
         def on_rm_error(func, path, exc_info):
             # Remove read-only and try again
+            """
+            Error handler for shutil.rmtree that makes a file or directory writable and retries the failed operation.
+            
+            Parameters:
+                func (callable): The removal function to retry (e.g., os.remove or os.rmdir).
+                path (str | os.PathLike): Filesystem path that failed to be removed.
+                exc_info (tuple): Exception information supplied by shutil.rmtree's onerror handler (ignored).
+            """
             os.chmod(path, stat.S_IWRITE)
             func(path)
 

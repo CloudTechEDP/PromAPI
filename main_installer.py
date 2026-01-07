@@ -1,6 +1,3 @@
-
-
-
 from util.logging import *
 import sys
 from util.ErrorMessages import error_message_box
@@ -12,6 +9,11 @@ args = sys.argv[1:]
 logging.info("Argumentos recebidos: %s", args)
 
 def startup():
+    """
+    Start the Uvicorn server to host the ASGI/FastAPI `app` on 0.0.0.0:8000.
+    
+    Configures the server with log level "info" and reload disabled, then runs it; this call blocks until the server stops.
+    """
     logging.info("Starting PromAPI application...")
     config = uvicorn.Config(
         app=app,
@@ -25,6 +27,11 @@ def startup():
 
 sistema = plataform_detect()
 def install():
+    """
+    Extracts embedded files and performs platform-specific service installation.
+    
+    This extracts embedded resources, then uses the global `sistema` value to determine the current platform and run the corresponding service setup routines: on Windows it sets up and starts the Windows service; on Linux it runs the Linux service setup. For other platforms no installation is performed.
+    """
     logging.info("Iniciando extração de arquivos incorporados...")
     extract_embedded_files()
     logging.info("Arquivos extraídos com sucesso.")
@@ -55,7 +62,6 @@ else:
             "PromAPI.exe install  - para instalar o serviço\n " \
             "PromAPI.exe start    - para iniciar o serviço sem instalá-lo"
             )
-
 
 
 
