@@ -8,9 +8,7 @@ exe_dir = os.path.abspath(os.path.dirname(sys.argv[0]))
 service_name = "promapi"
 exec_start = f"{exe_dir}/PromAPI start"
 description="promapi"
-user="root"
-
-
+user = os.popen('whoami').read().strip() # Get the current user
 
 def linux_service_setup():
     try:

@@ -1,4 +1,5 @@
 
+import os
 import stat
 
 
@@ -35,6 +36,6 @@ def extract_embedded_files():
         )
     return target_dir
 
-
-with open(".env", "w") as f:
-    f.write("OPENROUTER_API_KEY=SetYourKeyHere\n")
+if not os.path.exists(".env"):
+    with open(".env", "w") as f:
+        f.write("OPENROUTER_API_KEY=SetYourKeyHere\n")
