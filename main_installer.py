@@ -42,6 +42,8 @@ def install():
     logging.info("Sistema: %s", sistema)
 
 if args == ["start"]:
+    if not os.path.exists("static") or not os.path.exists("templates") or not os.path.exists("modules"):
+        extract_embedded_files()
     logging.info("Iniciando APP...")
     from main import *
     startup()
