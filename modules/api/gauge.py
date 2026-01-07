@@ -35,7 +35,8 @@ async def receive_metric(job_name: str, request: Request):
                 iause = ask_gepeto(error, raw_body)
                 yield f'Segue o que conseguimos entender:\n {iause}\n'
             except Exception as err:
-                yield f'{{"status": "error", "detail": "{str(err)}"}}\n'
+                import json
+                yield json.dumps({"status": "error", "detail": str(err)}) + '\n'
         return StreamingResponse(error_stream(), media_type="text/json")
 
 
