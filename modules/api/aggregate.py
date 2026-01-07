@@ -5,8 +5,8 @@ router = APIRouter()
 
 @router.post("/metrics/job/aggregate/{job_name}")
 async def increase_aggregate_metric(job_name: str, request: Request):
+    raw_body = (await request.body()).decode()
     try:
-        raw_body = (await request.body()).decode()
         counter_name = raw_body.strip().split('{')[0]
         labels_part = re.search(r'\{(.*)\}', raw_body)
         labels = {}
@@ -29,12 +29,13 @@ async def increase_aggregate_metric(job_name: str, request: Request):
             value = new_value
             response = update_metric(existing_metric, value, db)
         else:
+            db.close()
             table_class = AggregateTable
             response = add_metric_counter(table_class, counter_name, value, labels)
         return response
     except Exception as exc:
         error = str(exc)
-        raw_body = (await request.body()).decode().replace('\r', '').replace('\n', '')
+        raw_body = raw_body.replace('\r', '').replace('\n', '')
         async def error_stream():
             try:
                 yield 'Sua Metrica nao funcionou:\nVou usar o Gepeto para tentar entender o problema e propor uma solução...\n\n\n'

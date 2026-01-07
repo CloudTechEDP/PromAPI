@@ -3,8 +3,9 @@ from modules.middleware.master import *
 router = APIRouter()
 @router.post("/metrics/job/counter/{job_name}")
 async def receive_counter_metric(job_name: str, request: Request):
+    raw_body = (await request.body()).decode()
     try:
-        raw_body = (await request.body()).decode()
+        
         counter_name = raw_body.strip().split('{')[0]
         labels_part = re.search(r'\{(.*)\}', raw_body)
         unique_label = datetime.now().strftime("%Y%m%dT%H%M%S_%f")
@@ -24,7 +25,7 @@ async def receive_counter_metric(job_name: str, request: Request):
         return response
     except Exception as exc:
         error = str(exc)
-        raw_body = (await request.body()).decode().replace('\r', '').replace('\n', '')
+        raw_body = raw_body.replace('\r', '').replace('\n', '')
         async def error_stream():
             try:
                 yield 'Sua Metrica nao funcionou:\nVou usar o Gepeto para tentar entender o problema e propor uma solução...\n\n\n'

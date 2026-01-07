@@ -9,12 +9,9 @@ python-dotenv
 a2wsgi
 kafka-python
 six
-# logging
 elasticsearch
 prometheus-client
 sqlalchemy
 jinja2
 openai
 pyinstaller 
-pyinstaller
-# pywin32
