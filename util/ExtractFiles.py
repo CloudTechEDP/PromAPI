@@ -8,7 +8,10 @@ def extract_embedded_files():
     import shutil
     import sys
     import os
-    permission = stat.S_IRWXU | stat.S_IRWXG | stat.S_IRWXO  # 777
+    # permission = stat.S_IRWXU | stat.S_IRWXG | stat.S_IRWXO  # 777
+    permission = stat.S_IRUSR | stat.S_IWUSR | stat.S_IXUSR | \
+                 stat.S_IRGRP | stat.S_IXGRP | \
+                 stat.S_IROTH | stat.S_IXOTH
     try:
         target_dir="./"
         if getattr(sys, 'frozen', False):
