@@ -5,6 +5,7 @@ engine = create_engine("sqlite:///database/metrics.db", echo=False)
 SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False)
 Base.metadata.create_all(bind=engine)
 
+@try_catch_decorator
 def add_metric_counter(table_class, counter_name: str, value: float, labels: dict):
     try:
         db = SessionLocal()
@@ -32,6 +33,7 @@ def add_metric_counter(table_class, counter_name: str, value: float, labels: dic
             "detail": str(e)
         }
 
+@try_catch_decorator
 def update_metric(existing_metric, value: float, db):
     try:
         existing_metric.value = value
@@ -52,6 +54,7 @@ def update_metric(existing_metric, value: float, db):
             "detail": str(e)
         }
 
+@try_catch_decorator
 def log_error(error_message: str, raw_body: str, ia_solution: str):
     try:
         db = SessionLocal()

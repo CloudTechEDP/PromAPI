@@ -2,7 +2,7 @@ from modules.middleware.master import *
 
 API_TOKEN = os.getenv("OPENROUTER_API_KEY", "false_key")
 
-
+@try_catch_decorator
 def ask_gepeto(error, raw_body):
     from openai import OpenAI
     if API_TOKEN == "false_key":
