@@ -3,8 +3,9 @@ from modules.middleware.master import *
 router = APIRouter()
 @router.post("/metrics/job/counter/{job_name}")
 async def receive_counter_metric(job_name: str, request: Request):
+    raw_body = (await request.body()).decode()
     try:
-        raw_body = (await request.body()).decode()
+        
         counter_name = raw_body.strip().split('{')[0]
         labels_part = re.search(r'\{(.*)\}', raw_body)
         unique_label = datetime.now().strftime("%Y%m%dT%H%M%S_%f")
@@ -19,12 +20,19 @@ async def receive_counter_metric(job_name: str, request: Request):
                 labels[key.strip()] = value.strip().strip('"')
         value = raw_body.strip().split()[-1]
         value = float(value)
-    except Exception as e:
-        return {
-            "error": "counter metric error", 
-            "SendingFormat": 'counter_name{label1="value1",label2="value2"} value'
-            }
+        table_class = CounterTable
+        response = add_metric_counter(table_class, counter_name, value, labels)
+        return response
+    except Exception as exc:
+        error = str(exc)
+        raw_body = raw_body.replace('\r', '').replace('\n', '')
+        async def error_stream():
+            try:
+                yield 'Sua Metrica nao funcionou:\nVou usar o Gepeto para tentar entender o problema e propor uma solução...\n\n\n'
+                iause = ask_gepeto(error, raw_body)
+                yield f'Segue o que conseguimos entender:\n {iause}\n'
+            except Exception as err:
+                yield f'{{"status": "error", "detail": "{str(err)}"}}\n'
+        return StreamingResponse(error_stream(), media_type="text/json")
 
-    table_class = CounterTable
-    response = add_metric_counter(table_class, counter_name, value, labels)
-    return response
+

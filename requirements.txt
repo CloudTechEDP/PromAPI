@@ -2,14 +2,16 @@ fastapi
 uvicorn
 gunicorn
 pydantic
-
+psutil
 pyodbc
 mysql.connector
 python-dotenv
 a2wsgi
 kafka-python
 six
-# logging
 elasticsearch
 prometheus-client
 sqlalchemy
+jinja2
+openai
+pyinstaller 

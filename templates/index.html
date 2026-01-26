@@ -98,7 +98,7 @@
                 <p>Visualize as métricas expostas pela aplicação para monitoramento e análise.</p>
             </div>
             <br>
-            
+
             <div class="link-item">
                 <a href="/docs" class="modern-button">Acessar Swagger</a>
                 <h2>Swagger API Documentation</h2>
@@ -106,7 +106,13 @@
                 <p>Alguém tem alguma ideia???</p>
                 <p>Contribua!.</p>
             </div>
-
+            <div class="link-item">
+                <a href="/error" class="modern-button">Acessar Erros</a>
+                <h2>Visualização de Erros</h2>
+                <p>Veja os logs de erros capturados pela aplicação.</p>
+                <p>Monitore e analise os problemas para melhorar a estabilidade.</p>
+                <p>Nossos logs são Powered by AI.</p>
+            </div>
         </div>
 
         <div style="display: flex; justify-content: center;">
@@ -130,31 +136,6 @@
     </div>
 
     <script src="static/script.js"></script> 
-    <script>
-        // Detecta o protocolo, host e porta dinamicamente
-        const protocol = window.location.protocol; // Exemplo: 'http:' ou 'https:'
-        const host = window.location.hostname; // Exemplo: 'example.com'
-        const port = window.location.port; // Exemplo: '8080' (ou vazio para portas padrão)
-
-        // Constrói a URL base dinamicamente
-        const baseUrl = `${protocol}//${host}${port ? `:${port}` : ''}`;
-
-        // Substitui os links de exemplo com a URL dinâmica
-        document.addEventListener('DOMContentLoaded', () => {
-            document.querySelectorAll('code').forEach(codeElement => {
-                if (codeElement.textContent.includes('http://example.com')) {
-                    codeElement.textContent = codeElement.textContent.replace('http://example.com', baseUrl);
-                }
-            });
-
-            // Substitui as URLs nos comandos curl
-            document.querySelectorAll('pre.curl-text').forEach(preElement => {
-                if (preElement.textContent.includes('http://example.com')) {
-                    preElement.textContent = preElement.textContent.replace('http://example.com', baseUrl);
-                }
-            });
-        });
-    </script>
 
 </body>
 </html>
